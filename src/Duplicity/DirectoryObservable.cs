@@ -35,9 +35,22 @@ namespace Duplicity
                 _startedObserving = true;
                 _fileSystemWatcher.Watch();
             }
-            
+
             return _observable.Subscribe(observer);
         }
+
+        public void SetPollFrequency(int milliseconds)
+        {
+            _fileSystemWatcher.Settings.SetPollFrequencyTo(milliseconds);
+        }
+
+        public void Dispose()
+        {
+            if (_startedObserving)
+                _fileSystemWatcher.Dispose();
+
+            _observable.Dispose();
+        }        
 
         private void OnDirectoryChange(WatcherChangeTypes type, string path)
         {
@@ -47,12 +60,6 @@ namespace Duplicity
         private void OnFileChange(WatcherChangeTypes type, string path)
         {
             _observable.OnNext(new FileSystemChange(FileSystemSource.File, type, path));
-        }
-
-        public void Dispose()
-        {
-            if (_startedObserving)
-                _fileSystemWatcher.StopWatching();
         }
     }
 }

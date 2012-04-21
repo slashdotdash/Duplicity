@@ -49,8 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Observing\WhenFilesAreDeleted.cs" />
+    <Compile Include="Observing\WhenFilesAreModified.cs" />
+    <Compile Include="Observing\WithAnObservableDirectory.cs" />
     <Compile Include="Path.cs" />
-    <Compile Include="WhenFilesAreCreated.cs" />
+    <Compile Include="Observing\WhenFilesAreCreated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
