@@ -46,6 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DuplicationStrategy\DirectoryDeleted.cs" />
+    <Compile Include="DuplicationStrategy\DirectoryCreated.cs" />
+    <Compile Include="DuplicationStrategy\FileChanged.cs" />
+    <Compile Include="DuplicationStrategy\FileCreated.cs" />
+    <Compile Include="DuplicationStrategy\DuplicationHandlerFactory.cs" />
+    <Compile Include="DuplicationStrategy\FileDeleted.cs" />
+    <Compile Include="DuplicationStrategy\IDuplicationHandler.cs" />
+    <Compile Include="Duplicator.cs" />
     <Compile Include="FileSystemChange.cs" />
     <Compile Include="FileSystemObservable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
