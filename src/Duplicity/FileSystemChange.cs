@@ -12,13 +12,13 @@ namespace Duplicity
     {
         private readonly FileSystemSource _source;
         private readonly WatcherChangeTypes _change;
-        private readonly string _fileOrDirectoryName;        
+        private readonly string _fileOrDirectoryPath;        
 
-        public FileSystemChange(FileSystemSource source, WatcherChangeTypes change, string fileOrDirectoryName)
+        public FileSystemChange(FileSystemSource source, WatcherChangeTypes change, string fileOrDirectoryPath)
         {
             _source = source;
             _change = change;
-            _fileOrDirectoryName = fileOrDirectoryName;
+            _fileOrDirectoryPath = fileOrDirectoryPath;
         }
 
         public FileSystemSource Source
@@ -31,9 +31,12 @@ namespace Duplicity
             get { return _change; }
         }
 
-        public string FileOrDirectoryName
+        /// <summary>
+        /// Path to the changed file or directory, relative to the source observed directory
+        /// </summary>
+        public string FileOrDirectoryPath
         {
-            get { return _fileOrDirectoryName; }
+            get { return _fileOrDirectoryPath; }
         }
     }
 }

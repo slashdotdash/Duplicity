@@ -10,6 +10,7 @@ namespace Duplicity
     /// </summary>
     public sealed class FileSystemObservable : IObservable<FileSystemChange>, IDisposable
     {
+        private readonly string _sourceDirectory;
         private readonly Watcher _fileSystemWatcher;
         private readonly Subject<FileSystemChange> _observable = new Subject<FileSystemChange>();
 
@@ -19,6 +20,8 @@ namespace Duplicity
         {
             if (string.IsNullOrWhiteSpace(sourceDirectory)) throw new ArgumentNullException("sourceDirectory");
             if (!Directory.Exists(sourceDirectory)) throw new DirectoryNotFoundException("sourceDirectory");
+
+            _sourceDirectory = sourceDirectory;
 
             _fileSystemWatcher = new Watcher(sourceDirectory,
                 path => OnDirectoryChange(WatcherChangeTypes.Created, path),
@@ -54,12 +57,17 @@ namespace Duplicity
 
         private void OnDirectoryChange(WatcherChangeTypes type, string path)
         {
-            _observable.OnNext(new FileSystemChange(FileSystemSource.Directory, type, path));
+            _observable.OnNext(new FileSystemChange(FileSystemSource.Directory, type, StripSourceDirectory(path)));
         }
 
         private void OnFileChange(WatcherChangeTypes type, string path)
         {
-            _observable.OnNext(new FileSystemChange(FileSystemSource.File, type, path));
+            _observable.OnNext(new FileSystemChange(FileSystemSource.File, type, StripSourceDirectory(path)));
+        }
+
+        private string StripSourceDirectory(string path)
+        {
+            return path.Remove(0, _sourceDirectory.Length + 1);
         }
     }
 }

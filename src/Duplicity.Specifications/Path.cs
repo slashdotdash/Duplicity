@@ -9,8 +9,9 @@ namespace Duplicity.Specifications
         /// </summary>
         public static string GetTempDirectoryName()
         {
-            var path = Path.GetTempFileName();
-            File.Delete(path);
+            var path = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            //var path = Path.GetTempFileName();
+            //File.Delete(path);
             Directory.CreateDirectory(path);
 
             return path;

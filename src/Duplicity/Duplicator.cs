@@ -21,6 +21,7 @@ namespace Duplicity
             if (string.IsNullOrWhiteSpace(targetDirectory)) throw new ArgumentNullException("targetDirectory");
             if (!Directory.Exists(sourceDirectory)) throw new DirectoryNotFoundException();
             if (!Directory.Exists(targetDirectory)) throw new DirectoryNotFoundException();
+            if (sourceDirectory == targetDirectory) throw new ArgumentException("Cannot duplicate the source diretory to itself");
 
             _sourceDirectory = sourceDirectory;
             _handlerFactory = new DuplicationHandlerFactory(sourceDirectory, targetDirectory);
@@ -30,10 +31,8 @@ namespace Duplicity
 
         private void OnFileSystemChange(FileSystemChange change)
         {
-            var handler = _handlerFactory.Create(change);
-            var changedFileOrDirectory = change.FileOrDirectoryName.Remove(0, _sourceDirectory.Length + 1);
-
-            handler.Handle(changedFileOrDirectory);
+            var handler = _handlerFactory.Create(change);            
+            handler.Handle(change.FileOrDirectoryPath);
         }
 
         public void Dispose()
