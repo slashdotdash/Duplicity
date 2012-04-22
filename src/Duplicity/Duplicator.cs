@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reactive.Linq;
 using Duplicity.DuplicationStrategy;
 
 namespace Duplicity
@@ -26,12 +27,14 @@ namespace Duplicity
             _sourceDirectory = sourceDirectory;
             _handlerFactory = new DuplicationHandlerFactory(sourceDirectory, targetDirectory);
             _observable = new FileSystemObservable(sourceDirectory);
-            _subscription = _observable.Subscribe(OnFileSystemChange);
+
+            _subscription = Observable.Create<FileSystemChange>(observer => _observable.Subscribe(observer))
+                .Subscribe(OnFileSystemChange);
         }
 
         private void OnFileSystemChange(FileSystemChange change)
         {
-            var handler = _handlerFactory.Create(change);            
+            var handler = _handlerFactory.Create(change);
             handler.Handle(change.FileOrDirectoryPath);
         }
 

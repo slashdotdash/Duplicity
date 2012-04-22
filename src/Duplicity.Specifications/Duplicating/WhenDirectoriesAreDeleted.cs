@@ -15,6 +15,6 @@ namespace Duplicity.Specifications.Duplicating
 
         private Because of = () => Directory.Delete(ChangedFileOrDirectoryName);
 
-        private It should_delete_direcrtory = () => Wait.Until(() => Directory.GetDirectories(TargetDirectory).Length == 0);
+        private It should_delete_directory = () => Wait.Until(() => Directory.GetDirectories(TargetDirectory).Length == 0);
     }
 }

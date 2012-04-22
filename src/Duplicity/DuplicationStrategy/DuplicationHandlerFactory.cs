@@ -17,6 +17,7 @@ namespace Duplicity.DuplicationStrategy
             _fileDeletedHandler = new FileDeleted(sourceDirectory, targetDirectory);
             _fileChangedHandler = new FileChanged(sourceDirectory, targetDirectory);
             _directoryCreatedHandler = new DirectoryCreated(sourceDirectory, targetDirectory);
+            _directoryDeletedHandler = new DirectoryDeleted(sourceDirectory, targetDirectory);
         }
 
         public IDuplicationHandler Create(FileSystemChange modification)
@@ -43,6 +44,9 @@ namespace Duplicity.DuplicationStrategy
             {
                 case WatcherChangeTypes.Created:
                     return _directoryCreatedHandler;
+
+                case WatcherChangeTypes.Deleted:
+                    return _directoryDeletedHandler;
             }
 
             throw new InvalidOperationException();

@@ -22,7 +22,7 @@ namespace Duplicity
             if (!Directory.Exists(sourceDirectory)) throw new DirectoryNotFoundException("sourceDirectory");
 
             _sourceDirectory = sourceDirectory;
-
+            
             _fileSystemWatcher = new Watcher(sourceDirectory,
                 path => OnDirectoryChange(WatcherChangeTypes.Created, path),
                 path => OnDirectoryChange(WatcherChangeTypes.Deleted, path),
