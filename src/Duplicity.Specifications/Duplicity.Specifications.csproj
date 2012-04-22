@@ -49,6 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Observing\WhenDirectoriesAreDeleted.cs" />
+    <Compile Include="Observing\WhenDirectoriesAreCreated.cs" />
     <Compile Include="Observing\WhenFilesAreDeleted.cs" />
     <Compile Include="Observing\WhenFilesAreModified.cs" />
     <Compile Include="Observing\WithAnObservableDirectory.cs" />

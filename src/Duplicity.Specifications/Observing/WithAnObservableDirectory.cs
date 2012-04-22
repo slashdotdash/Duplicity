@@ -17,14 +17,18 @@ namespace Duplicity.Specifications.Observing
             get { return Changes.Single(); }
         }
 
-        private static DirectoryObservable _observable;
+        private static FileSystemObservable _observable;
         private static IDisposable _subscription;
 
-        protected Establish Context = () => SourceDirectory = TempPath.GetTempDirectoryName();
-
-        protected static void CreateDirectoryObservable()
+        protected Establish Context = () =>
         {
-            _observable = new DirectoryObservable(SourceDirectory);
+            SourceDirectory = TempPath.GetTempDirectoryName();
+            Changes = new List<FileSystemChange>();
+        };
+
+        protected static void CreateFileSystemObservable()
+        {
+            _observable = new FileSystemObservable(SourceDirectory);
             _subscription = _observable.Subscribe(change => Changes.Add(change));
             
             Thread.Sleep(1000);
@@ -34,8 +38,6 @@ namespace Duplicity.Specifications.Observing
         {
             _subscription.Dispose();
             _observable.Dispose();
-
-            Changes.Clear();
 
             Directory.Delete(SourceDirectory, true);
         };

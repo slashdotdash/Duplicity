@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileSystemChange.cs" />
-    <Compile Include="DirectoryObservable.cs" />
+    <Compile Include="FileSystemObservable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

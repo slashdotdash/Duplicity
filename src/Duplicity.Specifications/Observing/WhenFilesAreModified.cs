@@ -3,7 +3,7 @@ using Machine.Specifications;
 
 namespace Duplicity.Specifications.Observing
 {
-    [Subject(typeof(DirectoryObservable))]
+    [Subject(typeof(FileSystemObservable))]
     public sealed class WhenFilesAreModified : WithAnObservableDirectory
     {
         private static string _modifiedFilename;
@@ -12,7 +12,7 @@ namespace Duplicity.Specifications.Observing
         {
             _modifiedFilename = Path.Combine(SourceDirectory, "Modified File.txt");
             File.Create(_modifiedFilename).Close();
-            CreateDirectoryObservable();
+            CreateFileSystemObservable();
         };
 
         private Because of = () => File.AppendAllText(_modifiedFilename, "Some appended text");

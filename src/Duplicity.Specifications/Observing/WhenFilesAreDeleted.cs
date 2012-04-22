@@ -3,7 +3,7 @@ using Machine.Specifications;
 
 namespace Duplicity.Specifications.Observing
 {
-    [Subject(typeof(DirectoryObservable))]
+    [Subject(typeof(FileSystemObservable))]
     public sealed class WhenFilesAreDeleted : WithAnObservableDirectory
     {
         private static string _deletedFilename;
@@ -12,7 +12,7 @@ namespace Duplicity.Specifications.Observing
         {
             _deletedFilename = Path.Combine(SourceDirectory, "Deleted File.txt");
             File.Create(_deletedFilename).Close();
-            CreateDirectoryObservable();
+            CreateFileSystemObservable();
         };
 
         private Because of = () => File.Delete(_deletedFilename);

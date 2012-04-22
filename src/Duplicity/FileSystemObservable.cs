@@ -8,14 +8,14 @@ namespace Duplicity
     /// <summary>
     /// Observe changes to files and directories within the given directory
     /// </summary>
-    public sealed class DirectoryObservable : IObservable<FileSystemChange>, IDisposable
+    public sealed class FileSystemObservable : IObservable<FileSystemChange>, IDisposable
     {
         private readonly Watcher _fileSystemWatcher;
         private readonly Subject<FileSystemChange> _observable = new Subject<FileSystemChange>();
 
         private bool _startedObserving;
 
-        public DirectoryObservable(string sourceDirectory)
+        public FileSystemObservable(string sourceDirectory)
         {
             if (string.IsNullOrWhiteSpace(sourceDirectory)) throw new ArgumentNullException("sourceDirectory");
             if (!Directory.Exists(sourceDirectory)) throw new DirectoryNotFoundException("sourceDirectory");

@@ -3,10 +3,10 @@ using Machine.Specifications;
 
 namespace Duplicity.Specifications.Observing
 {
-    [Subject(typeof(DirectoryObservable))]
+    [Subject(typeof(FileSystemObservable))]
     public sealed class WhenFilesAreCreated : WithAnObservableDirectory
     {
-        private Establish context = () => CreateDirectoryObservable();
+        private Establish context = () => CreateFileSystemObservable();
         private Because of = () => File.Create(Path.Combine(SourceDirectory, "New File.txt")).Close();
 
         private It should_notify_new_file_created = () => Changes.Count.ShouldEqual(1);
