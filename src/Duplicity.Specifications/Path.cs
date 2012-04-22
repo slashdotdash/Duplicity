@@ -5,13 +5,11 @@ namespace Duplicity.Specifications
     internal static class TempPath
     {
         /// <summary>
-        /// Returns a unique temporary directory name.
+        /// Creates a uniquely named directory in the current system's temporary folder and returns the full path of that directory.
         /// </summary>
         public static string GetTempDirectoryName()
         {
             var path = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            //var path = Path.GetTempFileName();
-            //File.Delete(path);
             Directory.CreateDirectory(path);
 
             return path;
