@@ -29,6 +29,7 @@ namespace Duplicity
             _observable = new FileSystemObservable(sourceDirectory);
 
             _subscription = Observable.Create<FileSystemChange>(observer => _observable.Subscribe(observer))
+                //.Delay(TimeSpan.FromSeconds(1))
                 .Subscribe(OnFileSystemChange);
         }
 
