@@ -17,7 +17,7 @@ namespace Duplicity.DuplicationStrategy
             _fileDeletedHandler = new FileDeleted(sourceDirectory, targetDirectory);
             _fileChangedHandler = new FileChanged(sourceDirectory, targetDirectory);
             _directoryCreatedHandler = new DirectoryCreated(sourceDirectory, targetDirectory);
-            _directoryDeletedHandler = new DirectoryDeleted(sourceDirectory, targetDirectory);
+            _directoryDeletedHandler = new DirectoryDeleted(targetDirectory);
         }
 
         public IDuplicationHandler Create(FileSystemChange modification)

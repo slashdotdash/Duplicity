@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
+using Duplicity.Collections;
 
 namespace Duplicity.Filtering
 {
@@ -11,6 +12,12 @@ namespace Duplicity.Filtering
     {
         private readonly IObservable<IList<FileSystemChange>> _observable;
 
+        /// <summary>
+        /// Requires an observable sequence of buffers to sucessfully group/merge changes.        
+        /// </summary>
+        /// <example>
+        ///     observable.Buffer(TimeSpan.FromSeconds(10)).PrioritizeFileSystemChanges().Subscribe(...);
+        /// </example>
         public IgnoreChangesBeforeDeletionsFilter(IObservable<IList<FileSystemChange>> observable)
         {
             _observable = observable;
@@ -22,11 +29,35 @@ namespace Duplicity.Filtering
                 .Subscribe(observer);
         }
 
-        private IList<FileSystemChange> PrioritizeChanges(IList<FileSystemChange> source)
+        private static IList<FileSystemChange> PrioritizeChanges(IList<FileSystemChange> source)
         {
             if (source.Count == 1) return source;
 
-            return source;
+            var agregatedChanges = new AggregatedChangeVisitor();
+            var directory = new DirectoryTree();
+
+            source.Each(directory.Add);
+            directory.Accept(agregatedChanges);
+
+            return agregatedChanges.Changes;
+        }
+
+        internal sealed class AggregatedChangeVisitor : IComplexNodeVisitor<DirectoryTree>
+        {
+            private readonly IList<FileSystemChange> _changes = new List<FileSystemChange>();
+
+            public void Visit(DirectoryTree node)
+            {
+                if (node == null) return;
+                if (node.Change == null) return;
+                
+                _changes.Add(node.Value.Change);
+            }
+
+            public IList<FileSystemChange> Changes
+            {
+                get { return _changes; }
+            }
         }
     }
 }

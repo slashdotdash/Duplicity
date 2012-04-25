@@ -60,6 +60,16 @@ namespace Duplicity.Specifications.Filtering.IgnoreChangesBeforeDeletions
             return Change(FileSystemSource.File, WatcherChangeTypes.Created, path);
         }
 
+        public InputBuilder FileChanged(string path)
+        {
+            return Change(FileSystemSource.File, WatcherChangeTypes.Changed, path);
+        }
+
+        public InputBuilder FileDeleted(string path)
+        {
+            return Change(FileSystemSource.File, WatcherChangeTypes.Deleted, path);
+        }
+
         private InputBuilder Change(FileSystemSource source, WatcherChangeTypes type, string path)
         {
             _changes.Add(new FileSystemChange(source, type, path));
@@ -69,6 +79,6 @@ namespace Duplicity.Specifications.Filtering.IgnoreChangesBeforeDeletions
         public IObservable<IList<FileSystemChange>> ToObservable()
         {
             return _changes.ToObservable().Buffer(_changes.Count);
-        }
+        }        
     }
 }

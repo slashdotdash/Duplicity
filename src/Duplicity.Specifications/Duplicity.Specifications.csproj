@@ -55,6 +55,8 @@
     <Compile Include="Duplicating\WhenFilesAreDeleted.cs" />
     <Compile Include="Duplicating\WhenFilesAreCreated.cs" />
     <Compile Include="Duplicating\WithADuplicator.cs" />
+    <Compile Include="Filtering\IgnoreChangesBeforeDeletions\AggregateMultipleChangesInFiles.cs" />
+    <Compile Include="Filtering\IgnoreChangesBeforeDeletions\IgnoreChangedThenDeletedFiles.cs" />
     <Compile Include="Filtering\IgnoreChangesBeforeDeletions\FileSystemChangeStateTransitions.cs" />
     <Compile Include="Filtering\IgnoreChangesBeforeDeletions\IgnoreFilesInDeletedDirectory.cs" />
     <Compile Include="Filtering\IgnoreChangesBeforeDeletions\WithFilter.cs" />
@@ -66,6 +68,7 @@
     <Compile Include="Path.cs" />
     <Compile Include="Observing\WhenFilesAreCreated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpecExtensions\CustomAssertionExtensions.cs" />
     <Compile Include="Wait.cs" />
   </ItemGroup>
   <ItemGroup>

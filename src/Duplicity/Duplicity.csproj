@@ -34,6 +34,9 @@
     <Reference Include="FSWatcher">
       <HintPath>..\..\lib\FSWatcher.dll</HintPath>
     </Reference>
+    <Reference Include="Machine.Specifications">
+      <HintPath>..\..\packages\Machine.Specifications.0.5.6.0\lib\net40\Machine.Specifications.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Reactive">
@@ -46,6 +49,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\ComplexTree.cs" />
+    <Compile Include="Collections\ComplexTreeNode.cs" />
+    <Compile Include="Collections\ComplexTreeNodeList.cs" />
+    <Compile Include="Collections\IComplexNodeVisitor.cs" />
+    <Compile Include="Collections\EnumerableExtensions.cs" />
+    <Compile Include="Collections\ISimpleNodeVisitor.cs" />
+    <Compile Include="Collections\SimpleTreeNode.cs" />
+    <Compile Include="Collections\SimpleTreeNodeList.cs" />
     <Compile Include="DuplicationStrategy\DirectoryDeleted.cs" />
     <Compile Include="DuplicationStrategy\DirectoryCreated.cs" />
     <Compile Include="DuplicationStrategy\FileChanged.cs" />
@@ -56,14 +67,18 @@
     <Compile Include="Duplicator.cs" />
     <Compile Include="FileSystemChange.cs" />
     <Compile Include="FileSystemObservable.cs" />
+    <Compile Include="Collections\SimpleTree.cs" />
+    <Compile Include="Filtering\DirectoryTree.cs" />
     <Compile Include="Filtering\FileSystemChangeStateMachine.cs" />
     <Compile Include="Filtering\IgnoreChangesBeforeDeletionsFilter.cs" />
+    <Compile Include="Filtering\ObservableFilters.cs" />
     <Compile Include="TempPath.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
