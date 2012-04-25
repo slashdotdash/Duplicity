@@ -55,7 +55,9 @@
     <Compile Include="Duplicating\WhenFilesAreDeleted.cs" />
     <Compile Include="Duplicating\WhenFilesAreCreated.cs" />
     <Compile Include="Duplicating\WithADuplicator.cs" />
-    <Compile Include="Filtering\IgnoreChangesBeforeDeletions\WhenDirectoriesAreCreated.cs" />
+    <Compile Include="Filtering\IgnoreChangesBeforeDeletions\FileSystemChangeStateTransitions.cs" />
+    <Compile Include="Filtering\IgnoreChangesBeforeDeletions\IgnoreFilesInDeletedDirectory.cs" />
+    <Compile Include="Filtering\IgnoreChangesBeforeDeletions\WithFilter.cs" />
     <Compile Include="Observing\WhenDirectoriesAreDeleted.cs" />
     <Compile Include="Observing\WhenDirectoriesAreCreated.cs" />
     <Compile Include="Observing\WhenFilesAreDeleted.cs" />

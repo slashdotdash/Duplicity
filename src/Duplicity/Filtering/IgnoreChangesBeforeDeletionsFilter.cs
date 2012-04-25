@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 
 namespace Duplicity.Filtering
@@ -6,22 +7,26 @@ namespace Duplicity.Filtering
     /// <summary>
     /// Filter out any file or directory changes that occur before the file or directory (or one of its ancestors) are deleted.
     /// </summary>
-    internal sealed class IgnoreChangesBeforeDeletionsFilter : IObservable<FileSystemChange>
+    internal sealed class IgnoreChangesBeforeDeletionsFilter : IObservable<IList<FileSystemChange>>
     {
-        private readonly IObservable<FileSystemChange> _observable;
+        private readonly IObservable<IList<FileSystemChange>> _observable;
 
-        public IgnoreChangesBeforeDeletionsFilter(IObservable<FileSystemChange> observable)
+        public IgnoreChangesBeforeDeletionsFilter(IObservable<IList<FileSystemChange>> observable)
         {
             _observable = observable;
         }
-
-        public IDisposable Subscribe(IObserver<FileSystemChange> observer)
+   
+        public IDisposable Subscribe(IObserver<IList<FileSystemChange>> observer)
         {
-            return Observable.Create<FileSystemChange>(o => _observable.Subscribe(o))
-                //.Buffer(TimeSpan.FromSeconds(1))                
-                //.Select(changes => changes.GroupBy() )
-                //.GroupByUntil(change => change.Change, change => change, observable => observable)
+            return _observable.Select(PrioritizeChanges)
                 .Subscribe(observer);
+        }
+
+        private IList<FileSystemChange> PrioritizeChanges(IList<FileSystemChange> source)
+        {
+            if (source.Count == 1) return source;
+
+            return source;
         }
     }
 }

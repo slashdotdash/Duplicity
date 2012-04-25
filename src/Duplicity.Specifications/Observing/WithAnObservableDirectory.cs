@@ -17,6 +17,11 @@ namespace Duplicity.Specifications.Observing
             get { return Changes.Single(); }
         }
 
+        protected static FileSystemChange ChangeAt(int index)
+        {
+            return Changes.ElementAt(index);
+        }
+
         private static FileSystemObservable _observable;
         private static IDisposable _subscription;
 

@@ -29,6 +29,8 @@ namespace Duplicity
             _observable = new FileSystemObservable(sourceDirectory);
 
             _subscription = Observable.Create<FileSystemChange>(observer => _observable.Subscribe(observer))
+                // http://stackoverflow.com/questions/9985125/in-rx-how-to-group-latest-items-after-a-period-of-time
+                //.Buffer(() => _observable.Throttle(TimeSpan.FromSeconds(1)).Timeout(TimeSpan.FromMinutes(1)))
                 //.Delay(TimeSpan.FromSeconds(1))
                 .Subscribe(OnFileSystemChange);
         }
