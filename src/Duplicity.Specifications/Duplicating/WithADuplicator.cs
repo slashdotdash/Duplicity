@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Reactive.Linq;
 using System.Threading;
 using Machine.Specifications;
 
@@ -20,7 +22,7 @@ namespace Duplicity.Specifications.Duplicating
 
         protected static void CreateDuplicator()
         {
-            _duplicator = new Duplicator(SourceDirectory, TargetDirectory);
+            _duplicator = new Duplicator(SourceDirectory, TargetDirectory, new TestConfiguration());
 
             Thread.Sleep(1000);
         }
@@ -32,5 +34,13 @@ namespace Duplicity.Specifications.Duplicating
             Directory.Delete(SourceDirectory, true);
             Directory.Delete(TargetDirectory, true);
         };
+    }
+
+    internal sealed class TestConfiguration : IConfigurator
+    {
+        public IObservable<FileSystemChange> Configure(IObservable<FileSystemChange> observable)
+        {
+            return observable.Do(Console.WriteLine);
+        }
     }
 }

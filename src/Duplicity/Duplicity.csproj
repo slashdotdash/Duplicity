@@ -57,6 +57,7 @@
     <Compile Include="Collections\ISimpleNodeVisitor.cs" />
     <Compile Include="Collections\SimpleTreeNode.cs" />
     <Compile Include="Collections\SimpleTreeNodeList.cs" />
+    <Compile Include="Configurator.cs" />
     <Compile Include="DuplicationStrategy\DirectoryDeleted.cs" />
     <Compile Include="DuplicationStrategy\DirectoryCreated.cs" />
     <Compile Include="DuplicationStrategy\FileChanged.cs" />

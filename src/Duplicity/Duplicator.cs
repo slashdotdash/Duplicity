@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Reactive.Linq;
 using Duplicity.DuplicationStrategy;
-using Duplicity.Filtering;
 
 namespace Duplicity
 {
@@ -17,7 +14,7 @@ namespace Duplicity
         private readonly IDisposable _subscription;
         private readonly DuplicationHandlerFactory _handlerFactory;
 
-        public Duplicator(string sourceDirectory, string targetDirectory)
+        public Duplicator(string sourceDirectory, string targetDirectory, IConfigurator config)
         {
             if (string.IsNullOrWhiteSpace(sourceDirectory)) throw new ArgumentNullException("sourceDirectory");
             if (string.IsNullOrWhiteSpace(targetDirectory)) throw new ArgumentNullException("targetDirectory");
@@ -28,13 +25,7 @@ namespace Duplicity
             _handlerFactory = new DuplicationHandlerFactory(sourceDirectory, targetDirectory);
             _observable = new FileSystemObservable(sourceDirectory);
 
-            _subscription = Observable.Create<FileSystemChange>(observer => _observable.Subscribe(observer))
-                // http://stackoverflow.com/questions/9985125/in-rx-how-to-group-latest-items-after-a-period-of-time
-                .Buffer(() => _observable.Throttle(TimeSpan.FromSeconds(2)).Timeout(TimeSpan.FromMinutes(1)))
-                .PrioritizeFileSystemChanges()
-                .SelectMany(x => x)
-                .Do(Console.WriteLine)
-                .Subscribe(OnFileSystemChange);
+            _subscription = config.Configure(_observable).Subscribe(OnFileSystemChange);
         }
 
         private void OnFileSystemChange(FileSystemChange change)
