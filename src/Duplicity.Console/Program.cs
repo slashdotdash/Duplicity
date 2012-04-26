@@ -12,7 +12,7 @@ namespace Duplicity.Console
             
             new Computer().FileSystem.CopyDirectory(sourceDirectory, targetDirectory);
 
-            using (new Duplicator(sourceDirectory, targetDirectory))
+            using (new Duplicator(sourceDirectory, targetDirectory, new Configurator()))
             {
                 System.Console.WriteLine(string.Format(@"Duplicating changes: ""{0}"" => ""{1}""", sourceDirectory, targetDirectory));
                 System.Console.WriteLine("Press any key to exit...");
