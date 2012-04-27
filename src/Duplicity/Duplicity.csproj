@@ -74,6 +74,8 @@
     <Compile Include="Filtering\DirectoryTree.cs" />
     <Compile Include="Filtering\FileSystemChangeStateMachine.cs" />
     <Compile Include="Filtering\IgnoreChangesBeforeDeletionsFilter.cs" />
+    <Compile Include="Filtering\IgnoredFiles\FileMatcher.cs" />
+    <Compile Include="Filtering\IgnoredFiles\IMatcher.cs" />
     <Compile Include="Filtering\ObservableFilters.cs" />
     <Compile Include="TempPath.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
