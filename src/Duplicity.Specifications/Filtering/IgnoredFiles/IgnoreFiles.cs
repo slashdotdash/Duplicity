@@ -1,4 +1,4 @@
-﻿using Duplicity.Filtering.IgnoredFiles;
+﻿using Duplicity.Filtering.IgnoredFiles.GitIgnore;
 using Machine.Specifications;
 
 namespace Duplicity.Specifications.Filtering.IgnoredFiles

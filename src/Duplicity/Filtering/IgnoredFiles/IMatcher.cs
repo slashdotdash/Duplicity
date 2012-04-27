@@ -2,6 +2,6 @@
 {
     interface IMatcher
     {
-        bool IsMatch(string path);
+        bool IsMatch(FileSystemChange change);
     }
 }
