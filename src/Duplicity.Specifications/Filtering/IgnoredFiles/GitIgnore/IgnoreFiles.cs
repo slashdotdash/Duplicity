@@ -3,6 +3,13 @@ using Machine.Specifications;
 
 namespace Duplicity.Specifications.Filtering.IgnoredFiles.GitIgnore
 {
+    /// <summary>
+    /// Specifications for .gitignore filtering.
+    /// Examples taken from the gitignore man page and unit tests of Mono's NGit project (https://github.com/mono/ngit).
+    /// </summary>
+    /// <see cref="https://github.com/mono/ngit/blob/master/NGit.Test/NGit.Ignore/IgnoreMatcherTest.cs"/>
+    /// <seealso cref="https://github.com/mono/ngit/blob/master/NGit.Test/NGit.Ignore/IgnoreMatcherTest.cs"/>
+    /// <seealso cref="http://progit.org/book/ch2-2.html"/>
     [Subject(typeof(GitIgnoreFilter))]
     public class IgnoreFilePatternWithWildcard : WithAGitIgnoreFilter
     {
@@ -66,19 +73,6 @@ namespace Duplicity.Specifications.Filtering.IgnoredFiles.GitIgnore
         private It should_ignore_file_with_alternate_inital_char = () => ShouldIgnoreChangedFile("vest.stac");
 
         private It should_not_ignore_file_outside_range = () => ShouldNotIgnoreChangedFile("test.stae");
-        private It should_not_ignore_file_with_number = () => ShouldNotIgnoreChangedFile("test.sta9");
-        
-        //private It should_not_ignore_negated_file_match = () => ShouldNotIgnoreChangedFile("foo.html");
-        //private It should_not_ignore_negated_file_match_in_directory = () => ShouldNotIgnoreChangedFile("Documentation", "foo.html");
+        private It should_not_ignore_file_with_number = () => ShouldNotIgnoreChangedFile("test.sta9");        
     }
-
-
-    //pattern = "/[tv]est.sta[a-d]";
-    //AssertMatched(pattern, );
-    //AssertMatched(pattern, "");
-    //AssertMatched(pattern, "/test.stac");
-    //AssertMatched(pattern, "/test.stad");
-    //AssertMatched(pattern, "/vest.stac");
-    //AssertNotMatched(pattern, "");
-    //AssertNotMatched(pattern, "");
 }
