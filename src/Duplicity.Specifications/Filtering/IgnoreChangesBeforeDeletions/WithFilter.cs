@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using Duplicity.Filtering;
+using Duplicity.Filtering.Aggregation;
 using Machine.Specifications;
 
 namespace Duplicity.Specifications.Filtering.IgnoreChangesBeforeDeletions

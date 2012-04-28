@@ -71,9 +71,12 @@
     <Compile Include="FileSystemChange.cs" />
     <Compile Include="FileSystemObservable.cs" />
     <Compile Include="Collections\SimpleTree.cs" />
-    <Compile Include="Filtering\DirectoryTree.cs" />
-    <Compile Include="Filtering\FileSystemChangeStateMachine.cs" />
-    <Compile Include="Filtering\IgnoreChangesBeforeDeletionsFilter.cs" />
+    <Compile Include="Filtering\Aggregation\DirectoryTree.cs" />
+    <Compile Include="Filtering\Aggregation\FileSystemChangeStateMachine.cs" />
+    <Compile Include="Filtering\Aggregation\IgnoreChangesBeforeDeletionsFilter.cs" />
+    <Compile Include="Filtering\IFileSystemChangeFilter.cs" />
+    <Compile Include="Filtering\IgnoredFiles\GitIgnore\GitIgnoreFilter.cs" />
+    <Compile Include="Filtering\IgnoredFiles\GitIgnore\GitIgnoreParser.cs" />
     <Compile Include="Filtering\IgnoredFiles\GitIgnore\PathMatcher.cs" />
     <Compile Include="Filtering\IgnoredFiles\GitIgnore\FileMatcher.cs" />
     <Compile Include="Filtering\IgnoredFiles\GitIgnore\DirectoryMatcher.cs" />

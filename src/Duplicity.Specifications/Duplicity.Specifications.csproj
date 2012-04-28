@@ -62,7 +62,8 @@
     <Compile Include="Filtering\IgnoreChangesBeforeDeletions\FileSystemChangeStateTransitions.cs" />
     <Compile Include="Filtering\IgnoreChangesBeforeDeletions\IgnoreFilesInDeletedDirectory.cs" />
     <Compile Include="Filtering\IgnoreChangesBeforeDeletions\WithFilter.cs" />
-    <Compile Include="Filtering\IgnoredFiles\IgnoreFiles.cs" />
+    <Compile Include="Filtering\IgnoredFiles\GitIgnore\IgnoreFiles.cs" />
+    <Compile Include="Filtering\IgnoredFiles\GitIgnore\WithAGitIgnoreFilter.cs" />
     <Compile Include="Observing\WhenDirectoriesAreDeleted.cs" />
     <Compile Include="Observing\WhenDirectoriesAreCreated.cs" />
     <Compile Include="Observing\WhenFilesAreDeleted.cs" />

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Duplicity.Filtering
+namespace Duplicity.Filtering.Aggregation
 {
     public enum FileSystemChangeType
     {

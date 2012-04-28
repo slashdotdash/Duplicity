@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using Duplicity.Collections;
 
-namespace Duplicity.Filtering
+namespace Duplicity.Filtering.Aggregation
 {
     /// <summary>
     /// Filter out any file or directory changes that occur before the file or directory (or one of its ancestors) are deleted.

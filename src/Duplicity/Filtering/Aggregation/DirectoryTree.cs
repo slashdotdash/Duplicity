@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using Duplicity.Collections;
 
-namespace Duplicity.Filtering
+namespace Duplicity.Filtering.Aggregation
 {
     internal sealed class DirectoryTree : ComplexTreeNode<DirectoryTree>
     {

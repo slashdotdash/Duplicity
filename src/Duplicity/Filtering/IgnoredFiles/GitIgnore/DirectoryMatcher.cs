@@ -5,7 +5,7 @@ using Duplicity.Filtering.IgnoredFiles.FnMatch;
 namespace Duplicity.Filtering.IgnoredFiles.GitIgnore
 {
     /// <summary>
-    /// Matches patterns ending with a slash, it is removed for the purpose of the following description, but it would only find a match with a directory. 
+    /// Matches patterns ending with a slash, only finds a match with a directory. 
     /// </summary>
     /// <example>
     /// For example, foo/ will match a directory foo and paths underneath it, but will not match a regular file or a symbolic link foo.
