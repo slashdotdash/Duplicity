@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Duplicity.Filtering.IgnoredFiles.FnMatch;
 
 namespace Duplicity.Filtering.IgnoredFiles.GitIgnore
@@ -13,21 +14,35 @@ namespace Duplicity.Filtering.IgnoredFiles.GitIgnore
     internal sealed class PathMatcher : IMatcher
     {
         private readonly FileNameMatcher _matcher;        
+        private const char GitIgnorePathSeparator = '/';
 
         public PathMatcher(string pattern)
         {
             if (string.IsNullOrWhiteSpace(pattern)) throw new ArgumentNullException("pattern");
             if (pattern.StartsWith("!")) throw new ArgumentException("Negated patterns should not be used", "pattern");
-            
-            _matcher = new FileNameMatcher(pattern, null);
+
+            // Strip leading forward slash from pattern as matched paths don't start with the path separator character
+            if (pattern.StartsWith(GitIgnorePathSeparator + string.Empty))
+                pattern = pattern.Substring(1);
+
+            _matcher = new FileNameMatcher(pattern, GitIgnorePathSeparator);
         }
 
         public bool IsMatch(FileSystemChange change)
         {
             _matcher.Reset();
-            _matcher.Append(change.FileOrDirectoryPath);
+            _matcher.Append(AdaptToPattern(change.FileOrDirectoryPath));
 
             return _matcher.IsMatch();
+        }
+
+        /// <summary>
+        /// .gitignore patterns are specified using the Unix path separator character (/).
+        /// We need to replace the current environment directory separator charactor with a forward slash.
+        /// </summary>
+        private static string AdaptToPattern(string path)
+        {
+            return path.Replace(Path.DirectorySeparatorChar, GitIgnorePathSeparator);
         }
     }
 }

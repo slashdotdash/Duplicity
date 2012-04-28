@@ -26,9 +26,19 @@ namespace Duplicity.Specifications.Filtering.IgnoredFiles.GitIgnore
             _filter = new GitIgnoreParser(patterns).CreateFilter();
         }
 
-        protected static void ShouldIgnoreChangedFile(string filename)
+        protected static void ShouldIgnoreChangedFile(params string[] path)
         {
-            _filter.Filter(new FileSystemChange(FileSystemSource.File, WatcherChangeTypes.Created, filename)).ShouldBeTrue();
+           IsIgnoredFile(Path.Combine(path)).ShouldBeTrue();
+        }
+
+        protected static void ShouldNotIgnoreChangedFile(params string[] path)
+        {            
+            IsIgnoredFile(Path.Combine(path)).ShouldBeFalse();
+        }        
+
+        protected static bool IsIgnoredFile(string path)
+        {
+            return _filter.Filter(new FileSystemChange(FileSystemSource.File, WatcherChangeTypes.Created, path));
         }
     }
 }
