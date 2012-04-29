@@ -11,7 +11,12 @@ namespace Duplicity.Specifications.Observing
             Directory.CreateDirectory(Path.Combine(SourceDirectory, "Deleted Directory"));
             CreateFileSystemObservable();
         };
-        private Because of = () => Directory.Delete(Path.Combine(SourceDirectory, "Deleted Directory"));
+
+        private Because of = () =>
+        {
+            Directory.Delete(Path.Combine(SourceDirectory, "Deleted Directory"));
+            Wait.Until(() => Changes.Count == 1);
+        };
 
         private It should_notify_new_directory_created = () => Changes.Count.ShouldEqual(1);
         private It should_include_change_source = () => Change.Source.ShouldEqual(FileSystemSource.Directory);

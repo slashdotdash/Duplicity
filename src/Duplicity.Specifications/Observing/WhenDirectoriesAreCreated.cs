@@ -23,6 +23,7 @@ namespace Duplicity.Specifications.Observing
         {
             Directory.CreateDirectory(Path.Combine(SourceDirectory, "New Directory"));
             Directory.CreateDirectory(Path.Combine(SourceDirectory, "New Directory", "Sub Directory"));
+            Wait.Until(() => Changes.Count == 2);
         };
 
         private It should_notify_new_directories_created = () => Changes.Count.ShouldEqual(2);

@@ -12,7 +12,11 @@ namespace Duplicity.Specifications.Observing
             CreateFileSystemObservable();
         };
 
-        private Because of = () => File.AppendAllText(Path.Combine(SourceDirectory, "Modified File.txt"), "Some appended text");
+        private Because of = () =>
+        {
+            File.AppendAllText(Path.Combine(SourceDirectory, "Modified File.txt"), "Some appended text");
+            Wait.Until(() => Changes.Count == 1);
+        };
 
         private It should_notify_file_changed = () => Changes.Count.ShouldEqual(1);
         private It should_include_change_source = () => Change.Source.ShouldEqual(FileSystemSource.File);

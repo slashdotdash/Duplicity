@@ -12,7 +12,11 @@ namespace Duplicity.Specifications.Observing
             CreateFileSystemObservable();
         };
 
-        private Because of = () => File.Delete(Path.Combine(SourceDirectory, "Deleted File.txt"));
+        private Because of = () =>
+        {
+            File.Delete(Path.Combine(SourceDirectory, "Deleted File.txt"));
+            Wait.Until(() => Changes.Count == 1);
+        };
 
         private It should_notify_file_changed = () => Changes.Count.ShouldEqual(1);
         private It should_include_change_source = () => Change.Source.ShouldEqual(FileSystemSource.File);
