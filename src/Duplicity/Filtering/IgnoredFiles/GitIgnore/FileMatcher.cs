@@ -28,9 +28,28 @@ namespace Duplicity.Filtering.IgnoredFiles.GitIgnore
 
         public bool IsMatch(FileSystemChange change)
         {
+            var path = change.FileOrDirectoryPath;
+            var search = ExtractFileOrDirectoryNameOnly(change);
+
+            if (IsMatch(search)) return true;
+
+            // Go up the directory tree looking for any matches
+            while (path.IndexOf(Path.DirectorySeparatorChar) > 0)
+            {
+                path = path.Substring(0, path.LastIndexOf(Path.DirectorySeparatorChar));
+                search = GetDirectoryName(path);
+
+                if (IsMatch(search)) return true;
+            }
+
+            return false;
+        }
+
+        private bool IsMatch(string path)
+        {
             _matcher.Reset();
-            _matcher.Append(ExtractFileOrDirectoryNameOnly(change));            
-            
+            _matcher.Append(path);
+
             return _matcher.IsMatch();
         }
 
@@ -39,7 +58,7 @@ namespace Duplicity.Filtering.IgnoredFiles.GitIgnore
             switch (change.Source)
             {
                 case FileSystemSource.Directory:
-                    return Path.GetDirectoryName(change.FileOrDirectoryPath);
+                    return GetDirectoryName(change.FileOrDirectoryPath);
 
                 case FileSystemSource.File:
                     return Path.GetFileName(change.FileOrDirectoryPath);
@@ -47,6 +66,13 @@ namespace Duplicity.Filtering.IgnoredFiles.GitIgnore
                 default:
                     throw new InvalidOperationException();
             }
+        }
+
+        private static string GetDirectoryName(string path)
+        {
+            return path.Contains(Path.DirectorySeparatorChar)
+                       ? path.Substring(path.LastIndexOf(Path.DirectorySeparatorChar) + 1)
+                       : path;
         }
     }
 }

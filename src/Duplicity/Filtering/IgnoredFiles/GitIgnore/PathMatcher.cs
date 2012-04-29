@@ -30,8 +30,24 @@ namespace Duplicity.Filtering.IgnoredFiles.GitIgnore
 
         public bool IsMatch(FileSystemChange change)
         {
+            var path = change.FileOrDirectoryPath;
+            if (IsMatch(path)) return true;
+
+            // Go up the directory tree looking for any matches
+            while (path.IndexOf(Path.DirectorySeparatorChar) > 0)
+            {
+                path = path.Substring(0, path.LastIndexOf(Path.DirectorySeparatorChar));
+
+                if (IsMatch(path)) return true;
+            } 
+
+            return false;
+        }
+
+        private bool IsMatch(string path)
+        {
             _matcher.Reset();
-            _matcher.Append(AdaptToPattern(change.FileOrDirectoryPath));
+            _matcher.Append(AdaptToPattern(path));
 
             return _matcher.IsMatch();
         }

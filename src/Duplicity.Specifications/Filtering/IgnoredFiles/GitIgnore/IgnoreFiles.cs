@@ -75,4 +75,42 @@ namespace Duplicity.Specifications.Filtering.IgnoredFiles.GitIgnore
         private It should_not_ignore_file_outside_range = () => ShouldNotIgnoreChangedFile("test.stae");
         private It should_not_ignore_file_with_number = () => ShouldNotIgnoreChangedFile("test.sta9");        
     }
+
+    [Subject(typeof (GitIgnoreFilter))]
+    public class IgnorePatternWithWildcard : WithAGitIgnoreFilter
+    {
+        private Establish context = () => WithIgnoredPattern("*.st?");
+
+        private It should_ignore_file = () => ShouldIgnoreChangedFile("test.stp");
+        private It should_ignore_file2 = () => ShouldIgnoreChangedFile("anothertest.stg");
+        private It should_ignore_file3 = () => ShouldIgnoreChangedFile("anothertest.st0");
+        private It should_ignore_file4 = () => ShouldIgnoreChangedFile("anothertest.st1");
+
+        private It should_not_ignore_file_not_matching = () => ShouldNotIgnoreChangedFile("another", "test.sta1");
+    }
+
+    [Subject(typeof (GitIgnoreFilter))]
+    public class IgnoreFilesContainedInMatchingParentDirectory : WithAGitIgnoreFilter
+    {
+        private Establish context = () => WithIgnoredPattern("/src/ne?");
+
+        private It should_ignore_directory = () => ShouldIgnoreChangedDirectory("src", "new");
+        private It should_ignore_file_in_matching_directory = () => ShouldIgnoreChangedFile("src", "new", "a.c");
+        private It should_ignore_file_in_sub_directory = () => ShouldIgnoreChangedFile("src", "new", "a", "a.c");
+
+        private It should_not_ignore_file_not_matching = () => ShouldNotIgnoreChangedFile("src", "new.c");
+    }
+
+    [Subject(typeof(GitIgnoreFilter))]
+    public class IgnoreFilesContainedInMatchingDirectory : WithAGitIgnoreFilter
+    {
+        private Establish context = () => WithIgnoredPattern("ne?");
+
+        private It should_ignore_directory = () => ShouldIgnoreChangedDirectory("src", "new");
+        private It should_ignore_file_in_matching_directory = () => ShouldIgnoreChangedFile("src", "new", "a.c");
+        private It should_ignore_file_in_sub_directory = () => ShouldIgnoreChangedFile("src", "new", "a", "a.c");
+        private It should_ignore_directory_matching = () => ShouldIgnoreChangedDirectory("neb");
+
+        private It should_not_ignore_file_not_matching = () => ShouldNotIgnoreChangedFile("src", "new.c");
+    }
 }

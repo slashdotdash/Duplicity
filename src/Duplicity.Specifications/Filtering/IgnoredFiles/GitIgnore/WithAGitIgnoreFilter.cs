@@ -34,11 +34,26 @@ namespace Duplicity.Specifications.Filtering.IgnoredFiles.GitIgnore
         protected static void ShouldNotIgnoreChangedFile(params string[] path)
         {            
             IsIgnoredFile(Path.Combine(path)).ShouldBeFalse();
-        }        
+        }
 
-        protected static bool IsIgnoredFile(string path)
+        protected static void ShouldIgnoreChangedDirectory(params string[] path)
+        {
+            IsIgnoredDirectory(Path.Combine(path)).ShouldBeTrue();
+        }
+
+        protected static void ShouldNotIgnoreChangedDirectory(params string[] path)
+        {
+            IsIgnoredDirectory(Path.Combine(path)).ShouldBeFalse();
+        }
+
+        private static bool IsIgnoredFile(string path)
         {
             return _filter.Filter(new FileSystemChange(FileSystemSource.File, WatcherChangeTypes.Created, path));
+        }
+
+        private static bool IsIgnoredDirectory(string path)
+        {
+            return _filter.Filter(new FileSystemChange(FileSystemSource.Directory, WatcherChangeTypes.Created, path));
         }
     }
 }
