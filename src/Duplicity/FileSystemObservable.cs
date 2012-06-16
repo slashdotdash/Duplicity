@@ -47,6 +47,14 @@ namespace Duplicity
             _fileSystemWatcher.Settings.SetPollFrequencyTo(milliseconds);
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the underlying File System Watcher component is enabled.
+        /// </summary>
+        public bool IsAlive
+        {
+            get { return _startedObserving && _fileSystemWatcher.IsAlive; }
+        }
+
         public void Dispose()
         {
             if (_startedObserving)

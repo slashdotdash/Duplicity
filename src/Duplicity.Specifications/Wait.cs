@@ -31,6 +31,7 @@ namespace Duplicity.Specifications
 
                 Wait(Observable.Interval(retryInterval, _scheduler)
                     .Timeout(_scheduler.Now.Add(timeout), _scheduler))
+                    .StartWith(0)
                     .Subscribe(ticks => { });
             }
 

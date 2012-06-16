@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Reactive.Linq;
-using System.Threading;
 using Machine.Specifications;
 
 namespace Duplicity.Specifications.Duplicating
@@ -24,7 +23,7 @@ namespace Duplicity.Specifications.Duplicating
         {
             _duplicator = new Duplicator(SourceDirectory, TargetDirectory, new TestConfiguration());
 
-            Thread.Sleep(1000);
+            Wait.Until(() => _duplicator.IsAlive);
         }
 
         protected Cleanup Dispose = () =>

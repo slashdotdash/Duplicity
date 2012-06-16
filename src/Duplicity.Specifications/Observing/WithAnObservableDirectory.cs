@@ -36,7 +36,7 @@ namespace Duplicity.Specifications.Observing
             _observable = new FileSystemObservable(SourceDirectory);
             _subscription = _observable.Subscribe(change => Changes.Add(change));
             
-            Thread.Sleep(1000);
+            Wait.Until(() => _observable.IsAlive);
         }
 
         protected Cleanup Dispose = () =>

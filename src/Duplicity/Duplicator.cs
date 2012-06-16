@@ -14,6 +14,11 @@ namespace Duplicity
         private readonly IDisposable _subscription;
         private readonly DuplicationHandlerFactory _handlerFactory;
 
+        public bool IsAlive
+        {
+            get { return _observable.IsAlive; }
+        }
+
         public Duplicator(string sourceDirectory, string targetDirectory, IConfigurator config)
         {
             if (string.IsNullOrWhiteSpace(sourceDirectory)) throw new ArgumentNullException("sourceDirectory");
