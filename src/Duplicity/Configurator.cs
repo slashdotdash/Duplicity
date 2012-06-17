@@ -16,8 +16,7 @@ namespace Duplicity
             // http://stackoverflow.com/questions/9985125/in-rx-how-to-group-latest-items-after-a-period-of-time
             return observable.Buffer(() => observable.Throttle(TimeSpan.FromSeconds(2)).Timeout(TimeSpan.FromMinutes(1)))
                 .PrioritizeFileSystemChanges()
-                .SelectMany(x => x)
-                .Do(Console.WriteLine);
+                .SelectMany(x => x);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Duplicity.DuplicationStrategy
         public void Handle(string createdFile)
         {
             var copier = new CopyFileAsync(Path.Combine(_sourceDirectory, createdFile), Path.Combine(_targetDirectory, createdFile), false);
-            copier.Execute();
+            copier.Execute().Wait();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Duplicity
             if (string.IsNullOrWhiteSpace(targetDirectory)) throw new ArgumentNullException("targetDirectory");
             if (!Directory.Exists(sourceDirectory)) throw new DirectoryNotFoundException();
             if (!Directory.Exists(targetDirectory)) throw new DirectoryNotFoundException();
-            if (sourceDirectory == targetDirectory) throw new ArgumentException("Cannot duplicate the source diretory to itself");
+            if (sourceDirectory == targetDirectory) throw new ArgumentException("Cannot duplicate the source directory to itself");
 
             _handlerFactory = new DuplicationHandlerFactory(sourceDirectory, targetDirectory);
             _observable = new FileSystemObservable(sourceDirectory);
