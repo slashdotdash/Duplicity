@@ -10,9 +10,12 @@ namespace Duplicity.Specifications
     /// </summary>
     internal static class Wait
     {
-        public static void Until(Func<bool> waitPredicate, int timeoutInMilliseconds = 1000, int retryIntervalInMilliseconds = 100)
+        private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(3);
+        private static readonly TimeSpan DefaultRetryInterval = TimeSpan.FromMilliseconds(100);
+
+        public static void Until(Func<bool> waitPredicate)
         {
-            Until(waitPredicate, TimeSpan.FromMilliseconds(timeoutInMilliseconds), TimeSpan.FromMilliseconds(retryIntervalInMilliseconds));
+            Until(waitPredicate, DefaultTimeout, DefaultRetryInterval);
         }
 
         public static void Until(Func<bool> waitPredicate, TimeSpan timeout, TimeSpan retryInterval)

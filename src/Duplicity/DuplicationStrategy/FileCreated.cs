@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Duplicity.IO.Async;
 
 namespace Duplicity.DuplicationStrategy
 {
@@ -15,7 +16,8 @@ namespace Duplicity.DuplicationStrategy
 
         public void Handle(string createdFile)
         {
-            File.Copy(Path.Combine(_sourceDirectory, createdFile), Path.Combine(_targetDirectory, createdFile), false);
+            var copier = new CopyFileAsync(Path.Combine(_sourceDirectory, createdFile), Path.Combine(_targetDirectory, createdFile), false);
+            copier.Execute();
         }
     }
 }
