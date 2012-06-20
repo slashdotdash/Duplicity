@@ -30,7 +30,7 @@ namespace Duplicity.Filtering.Aggregation
             }
             else
             {
-                var resultantChange = FileSystemChangeStateMachine.Get(Convert(target.Value.Change.Change), Convert(change.Change));
+                var resultantChange = FileSystemChangeStateMachine.Get(target.Value.Change.Change.ToFileSystemChangeType(), change.Change.ToFileSystemChangeType());
                 switch (resultantChange)
                 {
                     case FileSystemChangeType.None:
@@ -38,7 +38,7 @@ namespace Duplicity.Filtering.Aggregation
                         return;
 
                     default:
-                        target.Change = new FileSystemChange(change.Source, Convert(resultantChange), change.FileOrDirectoryPath);
+                        target.Change = new FileSystemChange(change.Source, resultantChange.ToWatcherChangeTypes(), change.FileOrDirectoryPath);
                         break;
                 }
             }
@@ -53,31 +53,7 @@ namespace Duplicity.Filtering.Aggregation
         private static bool IsDeletingADirectory(FileSystemChange change)
         {
             return change.Source == FileSystemSource.Directory && change.Change == WatcherChangeTypes.Deleted;
-        }
-
-        private static FileSystemChangeType Convert(WatcherChangeTypes source)
-        {
-            switch (source)
-            {
-                case WatcherChangeTypes.Created: return FileSystemChangeType.Created;
-                case WatcherChangeTypes.Changed: return FileSystemChangeType.Changed;
-                case WatcherChangeTypes.Deleted: return FileSystemChangeType.Deleted;
-            }
-
-            throw new NotSupportedException();
-        }
-
-        private static WatcherChangeTypes Convert(FileSystemChangeType source)
-        {
-            switch (source)
-            {
-                case FileSystemChangeType.Created: return WatcherChangeTypes.Created;
-                case FileSystemChangeType.Changed: return WatcherChangeTypes.Changed;
-                case FileSystemChangeType.Deleted: return WatcherChangeTypes.Deleted;
-            }
-
-            throw new NotSupportedException();
-        }
+        }        
 
         private static DirectoryTree GetOrCreateDirectory(ComplexTreeNode<DirectoryTree> parent, string directory)
         {

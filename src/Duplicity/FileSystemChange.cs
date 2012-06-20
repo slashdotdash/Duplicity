@@ -39,6 +39,11 @@ namespace Duplicity
             get { return _fileOrDirectoryPath; }
         }
 
+        public bool IsSameFileOrDirectory(FileSystemChange compare)
+        {
+            return _source == compare.Source && _fileOrDirectoryPath == compare.FileOrDirectoryPath;
+        }
+
         #region Equality Members
         public bool Equals(FileSystemChange other)
         {

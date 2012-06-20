@@ -73,11 +73,13 @@
     <Compile Include="DuplicationStrategy\IDuplicationHandler.cs" />
     <Compile Include="Duplicator.cs" />
     <Compile Include="FileSystemChange.cs" />
+    <Compile Include="FileSystemChangeQueue.cs" />
     <Compile Include="FileSystemObservable.cs" />
     <Compile Include="Collections\SimpleTree.cs" />
     <Compile Include="Filtering\Aggregation\DirectoryTree.cs" />
     <Compile Include="Filtering\Aggregation\FileSystemChangeStateMachine.cs" />
     <Compile Include="Filtering\Aggregation\IgnoreChangesBeforeDeletionsFilter.cs" />
+    <Compile Include="Filtering\ChangeTypeExtensions.cs" />
     <Compile Include="Filtering\IFileSystemChangeFilter.cs" />
     <Compile Include="Filtering\IgnoredFiles\GitIgnore\GitIgnoreFilter.cs" />
     <Compile Include="Filtering\IgnoredFiles\GitIgnore\GitIgnoreParser.cs" />

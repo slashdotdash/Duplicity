@@ -1,5 +1,4 @@
-﻿using Duplicity.Filtering;
-using Duplicity.Filtering.Aggregation;
+﻿using Duplicity.Filtering.Aggregation;
 using Machine.Specifications;
 
 namespace Duplicity.Specifications.Filtering.IgnoreChangesBeforeDeletions

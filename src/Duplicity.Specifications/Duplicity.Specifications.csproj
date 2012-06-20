@@ -51,6 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Duplicating\Queue\WhenChangesAreQueued.cs" />
+    <Compile Include="Duplicating\Queue\WithAFileSystemChangeQueue.cs" />
     <Compile Include="Duplicating\WhenDirectoriesAreDeleted.cs" />
     <Compile Include="Duplicating\WhenDirectoriesAreCreated.cs" />
     <Compile Include="Duplicating\WhenFilesAreModified.cs" />
@@ -61,6 +63,7 @@
     <Compile Include="Filtering\IgnoreChangesBeforeDeletions\IgnoreChangedThenDeletedFiles.cs" />
     <Compile Include="Filtering\IgnoreChangesBeforeDeletions\FileSystemChangeStateTransitions.cs" />
     <Compile Include="Filtering\IgnoreChangesBeforeDeletions\IgnoreFilesInDeletedDirectory.cs" />
+    <Compile Include="Filtering\IgnoreChangesBeforeDeletions\InputBuilder.cs" />
     <Compile Include="Filtering\IgnoreChangesBeforeDeletions\WithFilter.cs" />
     <Compile Include="Filtering\IgnoredFiles\GitIgnore\IgnoreFiles.cs" />
     <Compile Include="Filtering\IgnoredFiles\GitIgnore\WithAGitIgnoreFilter.cs" />
