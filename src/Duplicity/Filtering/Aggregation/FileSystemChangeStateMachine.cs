@@ -11,6 +11,14 @@ namespace Duplicity.Filtering.Aggregation
         Changed,
     }
 
+    public static class FileSystemChangeTypeExtensions
+    {
+        public static bool Is(this FileSystemChangeType change, FileSystemChangeType equal)
+        {
+            return change == equal;
+        }
+    }
+
     /// <summary>
     /// Simple state machine to aggregate a finite number of file system changes to a single resultant change
     /// </summary>

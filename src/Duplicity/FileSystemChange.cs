@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Duplicity
 {
@@ -12,10 +13,12 @@ namespace Duplicity
     {
         private readonly FileSystemSource _source;
         private readonly WatcherChangeTypes _change;
-        private readonly string _fileOrDirectoryPath;        
+        private readonly string _fileOrDirectoryPath;
 
         public FileSystemChange(FileSystemSource source, WatcherChangeTypes change, string fileOrDirectoryPath)
         {
+            if (string.IsNullOrWhiteSpace(fileOrDirectoryPath)) throw new ArgumentNullException("fileOrDirectoryPath");
+
             _source = source;
             _change = change;
             _fileOrDirectoryPath = fileOrDirectoryPath;
