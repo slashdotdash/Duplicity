@@ -46,15 +46,27 @@ namespace Duplicity
         }
 
         /// <summary>
+        /// Cancel any pending changes made obsolete by the given change.
+        /// </summary>
+        /// <param name="change">Latest file system change</param>
+        private void CancelAnyPending(FileSystemChange change)
+        {
+            foreach (var pending in PendingChanges())
+            {
+                if (ShouldBeRemoved(pending.Value, change))
+                {
+                    _queue.Remove(pending);
+                }
+            }
+        }
+
+        /// <summary>
         /// Add the pending change to the end of the queue.
         /// </summary>
         private void Enqueue(FileSystemChange change)
         {
-            var current = _queue.First;
-
-            while (current != null)
+            foreach (var current in PendingChanges())
             {
-                var next = current.Next;
                 var pending = current.Value;
 
                 if (pending.IsSameFileOrDirectory(change))
@@ -72,19 +84,13 @@ namespace Duplicity
                     // Update with aggregated change to append to the queue
                     change = new FileSystemChange(change.Source, resultantChange.ToWatcherChangeTypes(), change.FileOrDirectoryPath);
                     break;
-                }
-                
-                current = next;
+                }               
             }
 
             _queue.AddLast(change);
-        }
+        }        
 
-        /// <summary>
-        /// Cancel any pending changes made obsolete by the given change.
-        /// </summary>
-        /// <param name="change">Latest file system change</param>
-        private void CancelAnyPending(FileSystemChange change)
+        private IEnumerable<LinkedListNode<FileSystemChange>> PendingChanges()
         {
             var current = _queue.First;
 
@@ -92,10 +98,7 @@ namespace Duplicity
             {
                 var next = current.Next;
 
-                if (ShouldBeRemoved(current.Value, change))
-                {
-                    _queue.Remove(current);
-                }
+                yield return current;
 
                 current = next;
             }
