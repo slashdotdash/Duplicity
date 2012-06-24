@@ -9,7 +9,7 @@ using Duplicity.Filtering;
 namespace Duplicity
 {
     /// <summary>
-    /// Queue of file system changes that uses a linked list internally to allow filtering/removal of pending changes
+    /// Queue of file system changes that uses a linked list internally to allow cancellation and removal of pending changes.
     /// </summary>
     public sealed class FileSystemChangeQueue : IDisposable
     {
@@ -109,25 +109,7 @@ namespace Duplicity
         /// </summary>
         private static bool ShouldBeRemoved(FileSystemChange pending, FileSystemChange change)
         {
-            if (IsDeletedDirectory(pending))
-            {
-                if (IsContainedWithin(change, pending))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static bool IsDeletedDirectory(FileSystemChange change)
-        {
-            return change.Source == FileSystemSource.Directory && change.Change == WatcherChangeTypes.Deleted;
-        }
-
-        private static bool IsContainedWithin(FileSystemChange parent, FileSystemChange child)
-        {
-            return false;
+            return change.IsDeletedDirectory() && change.Contains(pending);
         }
 
         public void Dispose()

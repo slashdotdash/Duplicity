@@ -52,7 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Duplicating\Queue\AggregateMultipleFileChangesInQueue.cs" />
+    <Compile Include="Duplicating\Queue\IgnoreQueuedChangesContainedWithinDeletedDirectories.cs" />
     <Compile Include="Duplicating\Queue\IgnoreCreatedThenDeletedFilesInQueue.cs" />
+    <Compile Include="Duplicating\Queue\Tasks\ExecuteSingleQueuedTask.cs" />
     <Compile Include="Duplicating\Queue\WhenChangesAreQueued.cs" />
     <Compile Include="Duplicating\Queue\WithAFileSystemChangeQueue.cs" />
     <Compile Include="Duplicating\WhenDirectoriesAreDeleted.cs" />

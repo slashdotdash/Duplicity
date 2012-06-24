@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Duplicity.Filtering.Aggregation;
 
 namespace Duplicity.Filtering
@@ -28,6 +29,42 @@ namespace Duplicity.Filtering
             }
 
             throw new NotSupportedException();
+        }
+
+        public static bool IsDeletedDirectory(this FileSystemChange change)
+        {
+            return change.Source == FileSystemSource.Directory && change.Change == WatcherChangeTypes.Deleted;
+        }
+
+        public static bool Contains(this FileSystemChange parent, FileSystemChange child)
+        {
+            var parentDirs = parent.Directories();
+            var childDirs = child.Directories();
+
+            for (var i = 0; i < childDirs.Length; i++)
+            {
+                if (childDirs[i] != parentDirs[i]) 
+                    return false;
+            }
+
+            return true;
+        }
+
+        private static string[] Directories(this FileSystemChange change)
+        {
+            var dirs = change.FileOrDirectoryPath.Split(Path.DirectorySeparatorChar);
+
+            switch (change.Source)
+            {
+                case FileSystemSource.Directory:
+                    return dirs;
+
+                case FileSystemSource.File:                    
+                    return dirs.Take(dirs.Length - 1).ToArray();
+
+                default:
+                    throw new NotSupportedException();
+            }            
         }
     }
 }
