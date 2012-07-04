@@ -1,6 +1,6 @@
 ﻿namespace Duplicity.DuplicationStrategy
 {
-    internal interface IDuplicationHandler
+    public interface IDuplicationHandler
     {
         void Handle(string fileOrDirectory);
     }

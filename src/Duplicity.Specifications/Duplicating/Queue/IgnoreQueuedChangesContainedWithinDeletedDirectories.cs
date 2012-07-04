@@ -13,7 +13,7 @@ namespace Duplicity.Specifications.Duplicating.Queue
             .FileDeleted(@"Dir\File.txt")
             .DirectoryDeleted("Dir");
 
-        private Because of = () => ApplyChanges();
+        private Because of = () => FileSystemChanges();
 
         private It should_ignore_changes_contained_within_deleted_directory = () => Queue.Pending.Count().ShouldEqual(1);
         private It should_include_deleted_directory_change = () => PendingAt(0).ShouldEqual(new FileSystemChange(FileSystemSource.Directory, WatcherChangeTypes.Deleted, "Dir"));

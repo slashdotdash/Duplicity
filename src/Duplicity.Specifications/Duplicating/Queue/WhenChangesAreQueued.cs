@@ -11,7 +11,7 @@ namespace Duplicity.Specifications.Duplicating.Queue
             .DirectoryCreated("New Directory")
             .FileCreated(@"New Directory\New File.txt");
 
-        private Because of = () => ApplyChanges();
+        private Because of = () => FileSystemChanges();
 
         private It should_queue_all_changes = () => Queue.Pending.Count().ShouldEqual(2);
 

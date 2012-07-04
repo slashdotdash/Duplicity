@@ -39,6 +39,7 @@
     <Reference Include="Machine.Specifications.Clr4">
       <HintPath>..\..\packages\Machine.Specifications.0.5.6.0\lib\net40\Machine.Specifications.Clr4.dll</HintPath>
     </Reference>
+    <Reference Include="ParallelExtensionsExtras, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Reactive">
@@ -52,9 +53,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Duplicating\Queue\AggregateMultipleFileChangesInQueue.cs" />
+    <Compile Include="Duplicating\Handlers\TestHandler.cs" />
+    <Compile Include="Duplicating\Handlers\TestHandlerFactory.cs" />
     <Compile Include="Duplicating\Queue\IgnoreQueuedChangesContainedWithinDeletedDirectories.cs" />
     <Compile Include="Duplicating\Queue\IgnoreCreatedThenDeletedFilesInQueue.cs" />
-    <Compile Include="Duplicating\Queue\Tasks\ExecuteSingleQueuedTask.cs" />
+    <Compile Include="Duplicating\Tasks\ExecuteQueuedTasksInOrder.cs" />
+    <Compile Include="Duplicating\Tasks\ExecuteSingleQueuedTask.cs" />
+    <Compile Include="Duplicating\Tasks\WithAFileSystemChangeBlockingCollection.cs" />
     <Compile Include="Duplicating\Queue\WhenChangesAreQueued.cs" />
     <Compile Include="Duplicating\Queue\WithAFileSystemChangeQueue.cs" />
     <Compile Include="Duplicating\WhenDirectoriesAreDeleted.cs" />

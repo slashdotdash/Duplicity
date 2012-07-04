@@ -71,8 +71,10 @@
     <Compile Include="DuplicationStrategy\DuplicationHandlerFactory.cs" />
     <Compile Include="DuplicationStrategy\FileDeleted.cs" />
     <Compile Include="DuplicationStrategy\IDuplicationHandler.cs" />
+    <Compile Include="DuplicationStrategy\IDuplicationHandlerFactory.cs" />
     <Compile Include="Duplicator.cs" />
     <Compile Include="FileSystemChange.cs" />
+    <Compile Include="FileSystemChangeConsumer.cs" />
     <Compile Include="FileSystemChangeQueue.cs" />
     <Compile Include="FileSystemObservable.cs" />
     <Compile Include="Collections\SimpleTree.cs" />

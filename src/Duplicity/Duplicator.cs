@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.IO;
 using Duplicity.DuplicationStrategy;
 
@@ -11,8 +12,8 @@ namespace Duplicity
     public sealed class Duplicator : IDisposable
     {
         private readonly FileSystemObservable _observable;
-        private readonly IDisposable _subscription;
         private readonly DuplicationHandlerFactory _handlerFactory;
+        private readonly BlockingCollection<FileSystemChange> _changes;
 
         public bool IsAlive
         {
@@ -26,23 +27,24 @@ namespace Duplicity
             if (!Directory.Exists(sourceDirectory)) throw new DirectoryNotFoundException();
             if (!Directory.Exists(targetDirectory)) throw new DirectoryNotFoundException();
             if (sourceDirectory == targetDirectory) throw new ArgumentException("Cannot duplicate the source directory to itself");
-
-            _handlerFactory = new DuplicationHandlerFactory(sourceDirectory, targetDirectory);
+            
             _observable = new FileSystemObservable(sourceDirectory);
+            _changes = new BlockingCollection<FileSystemChange>(new FileSystemChangeQueue());
+            _handlerFactory = new DuplicationHandlerFactory(sourceDirectory, targetDirectory);
+            
+            _changes.AddFromObservable(_observable, true);
+        }
 
-            _subscription = config.Configure(_observable).Subscribe(OnFileSystemChange);
+        public void Dispose()
+        {
+            _observable.Dispose();
+            _changes.Dispose();
         }
 
         private void OnFileSystemChange(FileSystemChange change)
         {
             var handler = _handlerFactory.Create(change);
             handler.Handle(change.FileOrDirectoryPath);
-        }
-
-        public void Dispose()
-        {
-            _subscription.Dispose();
-            _observable.Dispose();
         }
     }
 }

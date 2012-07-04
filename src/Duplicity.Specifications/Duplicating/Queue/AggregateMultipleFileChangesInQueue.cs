@@ -13,7 +13,7 @@ namespace Duplicity.Specifications.Duplicating.Queue
             .FileChanged(@"File.txt")
             .FileChanged(@"File.txt");    
 
-        private Because of = () => ApplyChanges();
+        private Because of = () => FileSystemChanges();
 
         private It should_include_single_change_for_file = () => Queue.Pending.Count().ShouldEqual(1);
         private It should_aggregate_changes = () => PendingAt(0).Change.ShouldEqual(WatcherChangeTypes.Created);

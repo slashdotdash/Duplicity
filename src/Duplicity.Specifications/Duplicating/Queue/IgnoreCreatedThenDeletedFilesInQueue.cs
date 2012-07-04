@@ -11,7 +11,7 @@ namespace Duplicity.Specifications.Duplicating.Queue
             .FileChanged(@"File.txt")
             .FileDeleted(@"File.txt");                          
 
-        private Because of = () => ApplyChanges();
+        private Because of = () => FileSystemChanges();
 
         private It should_ignore_created_then_deleted_files = () => Queue.Pending.Count().ShouldEqual(0);
     }
@@ -23,7 +23,7 @@ namespace Duplicity.Specifications.Duplicating.Queue
             .DirectoryCreated(@"Dir")
             .DirectoryDeleted(@"Dir");
 
-        private Because of = () => ApplyChanges();
+        private Because of = () => FileSystemChanges();
 
         private It should_ignore_created_then_deleted_directories = () => Queue.Pending.Count().ShouldEqual(0);
     }

@@ -38,6 +38,8 @@ namespace Duplicity.Filtering
 
         public static bool Contains(this FileSystemChange parent, FileSystemChange child)
         {
+            if (parent.FileOrDirectoryPath == child.FileOrDirectoryPath) return false;
+
             var parentDirs = parent.Directories();
             var childDirs = child.Directories();
 

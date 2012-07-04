@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reactive.Disposables;
 using Duplicity.Filtering.Aggregation;
 using Duplicity.Filtering;
 
@@ -10,26 +10,15 @@ namespace Duplicity
 {
     /// <summary>
     /// Queue of file system changes that uses a linked list internally to allow cancellation and removal of pending changes.
+    /// Implements IProducerConsumerCollection to allow thread-safe producer/consumer usage.
     /// </summary>
-    public sealed class FileSystemChangeQueue : IDisposable
+    public sealed class FileSystemChangeQueue : IProducerConsumerCollection<FileSystemChange>
     {
         private readonly object _padlock = new object();
 
         private readonly LinkedList<FileSystemChange> _queue = new LinkedList<FileSystemChange>();
 
-        private readonly CompositeDisposable _subscription = new CompositeDisposable();
-        
-        public FileSystemChangeQueue(IObservable<FileSystemChange> observable)
-        {
-            observable.Subscribe(OnFileSystemChange);
-        }
-
-        public IEnumerable<FileSystemChange> Pending
-        {
-            get { return _queue.ToArray(); }
-        }
-
-        private void OnFileSystemChange(FileSystemChange change)
+        public bool TryAdd(FileSystemChange change)
         {
             lock (_padlock)
             {
@@ -43,6 +32,77 @@ namespace Duplicity
                     Enqueue(change);
                 }
             }
+
+            return true;
+        }
+
+        public bool TryTake(out FileSystemChange item)
+        {
+            lock (_padlock)
+            {
+                if (_queue.Count == 0)
+                {
+                    item = default(FileSystemChange);
+                    return false;
+                }
+
+                item = _queue.First.Value;
+                _queue.RemoveFirst();
+            }
+
+            return true;
+        }
+
+        public IEnumerable<FileSystemChange> Pending
+        {
+            get { return ToArray(); }
+        }
+
+        public IEnumerator<FileSystemChange> GetEnumerator()
+        {
+            lock (_padlock)
+            {
+                var list = new List<FileSystemChange>(_queue.Count);
+                list.AddRange(_queue);
+                return list.GetEnumerator();
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public void CopyTo(Array array, int index)
+        {
+            lock (_padlock) { ((ICollection)_queue).CopyTo(array, index); }
+        }
+
+        public int Count
+        {
+            get { return _queue.Count; }
+        }
+
+        public object SyncRoot
+        {
+            get { throw new NotSupportedException(); }
+        }
+
+        public bool IsSynchronized
+        {
+            get { return false; }
+        }
+
+        public void CopyTo(FileSystemChange[] array, int index)
+        {
+            lock (_padlock) { _queue.CopyTo(array, index); }
+        }        
+
+        public FileSystemChange[] ToArray()
+        {
+            FileSystemChange[] copy;
+            lock (_padlock) { copy = _queue.ToArray(); }
+            return copy;
         }
 
         /// <summary>
@@ -110,11 +170,6 @@ namespace Duplicity
         private static bool ShouldBeRemoved(FileSystemChange pending, FileSystemChange change)
         {
             return change.IsDeletedDirectory() && change.Contains(pending);
-        }
-
-        public void Dispose()
-        {
-            _subscription.Dispose();
-        }
+        }        
     }
 }

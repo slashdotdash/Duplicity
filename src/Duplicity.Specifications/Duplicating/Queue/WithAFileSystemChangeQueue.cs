@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Concurrent;
+using System.Linq;
 using Duplicity.Specifications.Filtering.IgnoreChangesBeforeDeletions;
 using Machine.Specifications;
 
@@ -8,15 +9,18 @@ namespace Duplicity.Specifications.Duplicating.Queue
     {
         protected static InputBuilder Input;
         protected static FileSystemChangeQueue Queue;
-
+        
         protected Establish Context = () =>
         {
-            Input = new InputBuilder();            
+            Input = new InputBuilder();
+            Queue = new FileSystemChangeQueue();
+
+            new BlockingCollection<FileSystemChange>(Queue).AddFromObservable(Input, true);
         };
 
-        protected static void ApplyChanges()
+        protected static void FileSystemChanges()
         {
-            Queue = new FileSystemChangeQueue(Input.ToObservable());
+            Input.Publish();
         }
 
         protected static FileSystemChange PendingAt(int index)

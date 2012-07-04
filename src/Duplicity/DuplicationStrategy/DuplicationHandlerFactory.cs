@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Duplicity.DuplicationStrategy
 {
-    internal class DuplicationHandlerFactory
+    internal class DuplicationHandlerFactory : IDuplicationHandlerFactory
     {
         private readonly IDuplicationHandler _fileCreatedHandler;
         private readonly IDuplicationHandler _fileDeletedHandler;
