@@ -52,6 +52,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Duplicating\Handlers\BlockingHandler.cs" />
+    <Compile Include="Duplicating\Handlers\BlockingHandlerFactory.cs" />
     <Compile Include="Duplicating\Queue\AggregateMultipleFileChangesInQueue.cs" />
     <Compile Include="Duplicating\Handlers\TestHandler.cs" />
     <Compile Include="Duplicating\Handlers\TestHandlerFactory.cs" />
@@ -61,6 +63,7 @@
     <Compile Include="Duplicating\Tasks\ExecuteQueuedTasksInOrder.cs" />
     <Compile Include="Duplicating\Tasks\ExecuteSingleQueuedTask.cs" />
     <Compile Include="Duplicating\Tasks\NullConsumer.cs" />
+    <Compile Include="Duplicating\Tasks\OnlyConsumeItemsOneAtATime.cs" />
     <Compile Include="Duplicating\Tasks\WithAFileSystemChangeConsumer.cs" />
     <Compile Include="Duplicating\Queue\WhenChangesAreQueued.cs" />
     <Compile Include="Duplicating\Queue\WithAFileSystemChangeQueue.cs" />

@@ -25,16 +25,25 @@ namespace Duplicity
             {
                 _cancellationTokenSource = new CancellationTokenSource();
 
-                Task.Factory.StartNew(() => StartConsuming(producer), _cancellationTokenSource.Token);
+                Task.Factory.StartNew(() => StartConsuming(producer), _cancellationTokenSource.Token)
+                    .ContinueWith(task => FinishedConsuming());
             });
         }
 
+        private const int NotConsuming = 0;
+        private const int Consuming = 1;
+
         private void UnlessConsuming(Action consume)
         {
-            if (Interlocked.CompareExchange(ref _state, 1, 0) == 1)
+            if (Interlocked.CompareExchange(ref _state, Consuming, NotConsuming) == NotConsuming)
             {
                 consume();
             }
+        }
+
+        private void FinishedConsuming()
+        {
+            Interlocked.CompareExchange(ref _state, NotConsuming, Consuming);
         }
 
         private void StartConsuming(IProduceFileSystemChanges producer)
