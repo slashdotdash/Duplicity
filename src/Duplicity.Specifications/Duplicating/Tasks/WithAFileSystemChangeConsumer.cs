@@ -1,29 +1,30 @@
-﻿using System.Collections.Concurrent;
-using System.Linq;
+﻿using System.Linq;
 using Duplicity.Specifications.Duplicating.Handlers;
 using Duplicity.Specifications.Filtering.IgnoreChangesBeforeDeletions;
 using Machine.Specifications;
 
 namespace Duplicity.Specifications.Duplicating.Tasks
 {
-    public abstract class WithAFileSystemChangeBlockingCollection
+    public abstract class WithAFileSystemChangeConsumer
     {
         protected static InputBuilder Input;
-        protected static BlockingCollection<FileSystemChange> Collection;
         protected static TestHandlerFactory Handler;
+        protected static IProduceFileSystemChanges Producer;
+        protected static IConsumeFileSystemChanges Consumer;
 
         protected Establish Context = () =>
         {
             Input = new InputBuilder();
             Handler = new TestHandlerFactory();
+            Consumer = new FileSystemChangeConsumer(Handler);
         };
 
-        protected static void HandleFileSystemChanges()
+        protected static void ConsumeFileSystemChanges()
         {
-            Collection = Input.ToBlockingCollection();
-            new FileSystemChangeConsumer(Collection, Handler);
+            Producer = Input.ToProducer();
+            Consumer.Consume(Producer);
             
-            Wait.Until(() => Collection.Count == 0);
+            Wait.Until(() => Producer.IsEmpty);
         }
 
         protected static FileSystemChange ExecutedAt(int index)

@@ -6,11 +6,11 @@ using Duplicity.Specifications.SpecExtensions;
 namespace Duplicity.Specifications.Duplicating.Tasks
 {
     [Subject(typeof(FileSystemChangeQueue))]
-    public sealed class ExecuteSingleQueuedTask : WithAFileSystemChangeBlockingCollection
+    public sealed class ExecuteSingleQueuedTask : WithAFileSystemChangeConsumer
     {
         private Establish context = () => Input.FileCreated(@"New File.txt");
 
-        private Because of = () => HandleFileSystemChanges();
+        private Because of = () => ConsumeFileSystemChanges();
 
         private It should_execute_single_handler = () => Handler.Executed.Count().ShouldEqual(1);
         private It should_execute_file_created_handler = () => ExecutedAt(0).ShouldEqual(new FileSystemChange(FileSystemSource.File, WatcherChangeTypes.Created, "New File.txt"));

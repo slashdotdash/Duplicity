@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Duplicity.Filtering.Aggregation;
@@ -10,21 +8,34 @@ namespace Duplicity
 {
     /// <summary>
     /// Queue of file system changes that uses a linked list internally to allow cancellation and removal of pending changes.
-    /// Implements IProducerConsumerCollection to allow thread-safe producer/consumer usage.
     /// </summary>
-    public sealed class FileSystemChangeQueue : IProducerConsumerCollection<FileSystemChange>
+    public sealed class FileSystemChangeQueue : IProduceFileSystemChanges, IDisposable
     {
         private readonly object _padlock = new object();
 
         private readonly LinkedList<FileSystemChange> _queue = new LinkedList<FileSystemChange>();
 
-        public bool TryAdd(FileSystemChange change)
+        private readonly IConsumeFileSystemChanges _consumer;
+
+        public FileSystemChangeQueue(IObservable<FileSystemChange> observable, IConsumeFileSystemChanges consumer)
+        {
+            _consumer = consumer;
+
+            observable.Subscribe(change => Add(change));
+        }
+
+        public bool IsEmpty
+        {
+            get { lock (_padlock) { return _queue.Count == 0; } }
+        }
+
+        public bool Add(FileSystemChange change)
         {
             lock (_padlock)
             {
                 if (_queue.Count == 0)
                 {
-                    _queue.AddLast(change);
+                    AddLast(change);                    
                 }
                 else
                 {
@@ -36,17 +47,17 @@ namespace Duplicity
             return true;
         }
 
-        public bool TryTake(out FileSystemChange item)
+        public bool TryTake(out FileSystemChange change)
         {
             lock (_padlock)
             {
                 if (_queue.Count == 0)
                 {
-                    item = default(FileSystemChange);
+                    change = default(FileSystemChange);
                     return false;
                 }
 
-                item = _queue.First.Value;
+                change = _queue.First.Value;
                 _queue.RemoveFirst();
             }
 
@@ -55,54 +66,12 @@ namespace Duplicity
 
         public IEnumerable<FileSystemChange> Pending
         {
-            get { return ToArray(); }
+            get { return _queue.ToList(); }
         }
 
-        public IEnumerator<FileSystemChange> GetEnumerator()
+        public void Dispose()
         {
-            lock (_padlock)
-            {
-                var list = new List<FileSystemChange>(_queue.Count);
-                list.AddRange(_queue);
-                return list.GetEnumerator();
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public void CopyTo(Array array, int index)
-        {
-            lock (_padlock) { ((ICollection)_queue).CopyTo(array, index); }
-        }
-
-        public int Count
-        {
-            get { return _queue.Count; }
-        }
-
-        public object SyncRoot
-        {
-            get { throw new NotSupportedException(); }
-        }
-
-        public bool IsSynchronized
-        {
-            get { return false; }
-        }
-
-        public void CopyTo(FileSystemChange[] array, int index)
-        {
-            lock (_padlock) { _queue.CopyTo(array, index); }
-        }        
-
-        public FileSystemChange[] ToArray()
-        {
-            FileSystemChange[] copy;
-            lock (_padlock) { copy = _queue.ToArray(); }
-            return copy;
+            
         }
 
         /// <summary>
@@ -147,8 +116,19 @@ namespace Duplicity
                 }               
             }
 
-            _queue.AddLast(change);
+            AddLast(change);
         }        
+
+        /// <summary>
+        /// Adds the given change to the end of the queue and notifies consumer that at least one change is pending.
+        /// </summary>
+        private void AddLast(FileSystemChange change)
+        {
+            _queue.AddLast(change);
+
+            // Notify consumer of the change
+            _consumer.Consume(this);
+        }
 
         private IEnumerable<LinkedListNode<FileSystemChange>> PendingChanges()
         {

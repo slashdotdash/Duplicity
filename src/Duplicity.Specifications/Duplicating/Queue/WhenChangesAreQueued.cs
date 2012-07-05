@@ -22,5 +22,7 @@ namespace Duplicity.Specifications.Duplicating.Queue
         private It should_include_file_change_source = () => PendingAt(1).Source.ShouldEqual(FileSystemSource.File);
         private It should_include_file_type_of_change = () => PendingAt(1).Change.ShouldEqual(WatcherChangeTypes.Created);
         private It should_include_file_changed_file_path = () => PendingAt(1).FileOrDirectoryPath.ShouldEqual(@"New Directory\New File.txt");
+
+        private It should_notify_consumer_when_change_is_added = () => Consumer.HasStatedConsuming.ShouldBeTrue();
     }
 }

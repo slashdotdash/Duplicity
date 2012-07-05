@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Duplicity.Collections;
+using Duplicity.Specifications.Duplicating.Queue;
 
 namespace Duplicity.Specifications.Filtering.IgnoreChangesBeforeDeletions
 {
@@ -18,11 +18,9 @@ namespace Duplicity.Specifications.Filtering.IgnoreChangesBeforeDeletions
             _changes.Each(change => _subject.OnNext(change));
         }
 
-        public BlockingCollection<FileSystemChange> ToBlockingCollection()
+        public IProduceFileSystemChanges ToProducer()
         {
-            var collection = new BlockingCollection<FileSystemChange>();
-            _changes.Each(collection.Add);
-            return collection;
+            return new ListProducer(_changes);
         }
 
         public IObservable<IList<FileSystemChange>> ToBufferedObservable()
@@ -64,6 +62,6 @@ namespace Duplicity.Specifications.Filtering.IgnoreChangesBeforeDeletions
         {
             _changes.Add(new FileSystemChange(source, type, path));
             return this;
-        }        
+        }
     }
 }

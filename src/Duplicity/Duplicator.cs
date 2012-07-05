@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.IO;
 using Duplicity.DuplicationStrategy;
 
@@ -13,7 +12,8 @@ namespace Duplicity
     {
         private readonly FileSystemObservable _observable;
         private readonly DuplicationHandlerFactory _handlerFactory;
-        private readonly BlockingCollection<FileSystemChange> _changes;
+        private readonly FileSystemChangeQueue _changes;
+        private readonly IConsumeFileSystemChanges _consumer;
 
         public bool IsAlive
         {
@@ -29,10 +29,10 @@ namespace Duplicity
             if (sourceDirectory == targetDirectory) throw new ArgumentException("Cannot duplicate the source directory to itself");
             
             _observable = new FileSystemObservable(sourceDirectory);
-            _changes = new BlockingCollection<FileSystemChange>(new FileSystemChangeQueue());
             _handlerFactory = new DuplicationHandlerFactory(sourceDirectory, targetDirectory);
-            
-            _changes.AddFromObservable(_observable, true);
+            _consumer = new FileSystemChangeConsumer(_handlerFactory);
+
+            _changes = new FileSystemChangeQueue(_observable, _consumer); 
         }
 
         public void Dispose()

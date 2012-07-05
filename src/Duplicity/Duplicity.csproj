@@ -101,7 +101,9 @@
     <Compile Include="Filtering\IgnoredFiles\FnMatch\WildCardHead.cs" />
     <Compile Include="Filtering\IgnoredFiles\IMatcher.cs" />
     <Compile Include="Filtering\ObservableFilters.cs" />
+    <Compile Include="IConsumeFileSystemChanges.cs" />
     <Compile Include="IO\Async\CopyFileAsync.cs" />
+    <Compile Include="IProduceFileSystemChanges.cs" />
     <Compile Include="TempPath.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

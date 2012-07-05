@@ -57,9 +57,11 @@
     <Compile Include="Duplicating\Handlers\TestHandlerFactory.cs" />
     <Compile Include="Duplicating\Queue\IgnoreQueuedChangesContainedWithinDeletedDirectories.cs" />
     <Compile Include="Duplicating\Queue\IgnoreCreatedThenDeletedFilesInQueue.cs" />
+    <Compile Include="Duplicating\Queue\ListProducer.cs" />
     <Compile Include="Duplicating\Tasks\ExecuteQueuedTasksInOrder.cs" />
     <Compile Include="Duplicating\Tasks\ExecuteSingleQueuedTask.cs" />
-    <Compile Include="Duplicating\Tasks\WithAFileSystemChangeBlockingCollection.cs" />
+    <Compile Include="Duplicating\Tasks\NullConsumer.cs" />
+    <Compile Include="Duplicating\Tasks\WithAFileSystemChangeConsumer.cs" />
     <Compile Include="Duplicating\Queue\WhenChangesAreQueued.cs" />
     <Compile Include="Duplicating\Queue\WithAFileSystemChangeQueue.cs" />
     <Compile Include="Duplicating\WhenDirectoriesAreDeleted.cs" />
